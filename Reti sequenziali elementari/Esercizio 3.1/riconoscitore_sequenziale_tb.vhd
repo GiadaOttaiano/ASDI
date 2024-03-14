@@ -13,21 +13,21 @@ ARCHITECTURE behavioral OF riconoscitore_sequenziale_tb IS
     SIGNAL output : STD_LOGIC := 'U';
 
     COMPONENT riconoscitore_sequenziale IS
-        port(
-            i : IN STD_LOGIC;
-            m : IN STD_LOGIC;
-            a : IN STD_LOGIC;
-            y : OUT STD_LOGIC
+        PORT (
+            rs_input : IN STD_LOGIC;
+            rs_mode : IN STD_LOGIC;
+            rs_temp : IN STD_LOGIC;
+            rs_output : OUT STD_LOGIC
         );
     END COMPONENT;
 
 BEGIN
     uut : riconoscitore_sequenziale
     PORT MAP(
-        i => input,
-        m => mode,
-        a => temp,
-        y => output
+        rs_input => input,
+        rs_mode => mode,
+        rs_temp => temp,
+        rs_output => output
     );
 
     temp_process : PROCESS
@@ -40,51 +40,55 @@ BEGIN
 
     stim_proc : PROCESS
     BEGIN
-        i <= '0';
-        m <= '0';
+        WAIT FOR 100 ns;
+        input <= '0';
+        mode <= '0';
         WAIT FOR 10 ns;
 
-        i <= '1';
-        m <= '0';
+        input <= '1';
+        mode <= '0';
         WAIT FOR 10 ns;
 
-        i <= '1';
-        m <= '0';
+        input <= '1';
+        mode <= '0';
+        WAIT FOR 10 ns;
+        
+        input <= '1';
+        mode <= '0';
         WAIT FOR 10 ns;
 
-        i <= '0';
-        m <= '0';
+        input <= '0';
+        mode <= '0';
         WAIT FOR 10 ns;
 
-        i <= '1';
-        m <= '0';
+        input <= '1';
+        mode <= '0';
+        WAIT FOR 10 ns; -- uscita alta
+
+        input <= '0';
+        mode <= '1';
         WAIT FOR 10 ns;
 
-        i <= '0';
-        m <= '1';
+        input <= '1';
+        mode <= '1';
         WAIT FOR 10 ns;
 
-        i <= '1';
-        m <= '1';
+        input <= '0';
+        mode <= '1';
         WAIT FOR 10 ns;
 
-        i <= '0';
-        m <= '1';
+        input <= '1';
+        mode <= '1';
+        WAIT FOR 10 ns; -- uscita alta
+
+        input <= '0';
+        mode <= '1';
         WAIT FOR 10 ns;
 
-        i <= '1';
-        m <= '1';
-        WAIT FOR 10 ns;
-
-        i <= '0';
-        m <= '1';
-        WAIT FOR 10 ns;
-
-        i <= '0';
-        m <= '0';
+        input <= '1';
+        mode <= '1';
         WAIT FOR 10 ns;
 
         WAIT;
     END PROCESS;
-
-END PROCESS;
+END behavioral;
