@@ -6,7 +6,7 @@ entity shift_register_structural is
     port(
         reg_input, rst, clk : in STD_LOGIC;
         shift : in STD_LOGIC_VECTOR(1 downto 0);
-        reg_output : out STD_LOGIC
+        reg_output : out STD_LOGIC_VECTOR(3 downto 0)
     );
 end shift_register_structural;
 
@@ -77,7 +77,7 @@ architecture structural of shift_register_structural is
             rst => rst,
             Q => F(0)
         );
-        reg_output => F(0);
+        reg_output(0) <= F(0);
 
         ff1 : flip_flop_d
         port map(
@@ -86,7 +86,7 @@ architecture structural of shift_register_structural is
             rst => rst,
             Q => F(1)
         );
-        reg_output => F(1);
+        reg_output(1) <= F(1);
 
         ff2 : flip_flop_d
         port map(
@@ -95,7 +95,7 @@ architecture structural of shift_register_structural is
             rst => rst,
             Q => F(2)
         );
-        reg_output => F(2);
+        reg_output(2) <= F(2);
         
         ff3 : flip_flop_d
         port map(
@@ -104,6 +104,6 @@ architecture structural of shift_register_structural is
             rst => rst,
             Q => F(3)
         );
-        reg_output => F(3);
+        reg_output(3) <= F(3);
 
-end behavioral;
+end structural;
