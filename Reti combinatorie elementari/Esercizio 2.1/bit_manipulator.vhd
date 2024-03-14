@@ -1,24 +1,25 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
 
-entity bit_manipulator is
-    port (
-        input_data : in STD_LOGIC_VECTOR(3 downto 0); 
-        output_data : out STD_LOGIC_VECTOR(1 downto 0)
+ENTITY bit_manipulator IS
+    PORT (
+        bm_input : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+        bm_output : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
     );
-end entity bit_manipulator;
+END bit_manipulator;
 
-architecture Behavioral of bit_manipulator is
-    signal group1, group2 : STD_LOGIC_VECTOR(1 downto 0);
-    signal result : signed(1 downto 0);
-    
-    begin 
-        group1 <= input_data(3 downto 2);
-        group2 <= input_data(1 downto 0);
-        
-        result <= signed(group1) - signed(group2);
-        
-        output_data <= STD_LOGIC_VECTOR(result) when result >= 0 else STD_LOGIC_VECTOR(result + to_signed(4, 2));
+ARCHITECTURE dataflow OF bit_manipulator IS
+    SIGNAL group1, group2 : signed(1 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL result : signed(1 DOWNTO 0) := (OTHERS => '0');
+BEGIN
+    group1 <= signed(bm_input(3 DOWNTO 2));
+    group2 <= signed(bm_input(1 DOWNTO 0));
 
-end architecture Behavioral;
+    -- Scegli il numero più grande per la sottrazione
+    result <= (OTHERS => '0') WHEN group1 = group2 ELSE
+        (group1 - group2) WHEN group1 >= group2 ELSE
+        (group2 - group1);
+
+    bm_output <= STD_LOGIC_VECTOR(result);
+END dataflow;

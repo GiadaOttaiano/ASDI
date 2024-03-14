@@ -1,39 +1,40 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use work.all;
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
 
-entity system_s is
-    port(
-        s_input : in STD_LOGIC_VECTOR(3 downto 0);
-        s_output : out STD_LOGIC_VECTOR(3 downto 0)
+ENTITY system_s IS
+    PORT (
+        s_input : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+        s_output : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     );
-end system_s;
+END system_s;
 
-architecture structural of system_s is
-    signal u : STD_LOGIC_VECTOR(7 downto 0);
+ARCHITECTURE structural OF system_s IS
+    SIGNAL system_u : STD_LOGIC_VECTOR(7 DOWNTO 0) := (OTHERS => '0');
 
-    component rom is
-        port(   address : in std_logic_vector(3 downto 0);
-                rom_output : out std_logic_vector(7 downto 0)
+    COMPONENT rom IS
+        PORT (
+            rom_address : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+            rom_output : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+        );
+    END COMPONENT;
+
+    COMPONENT machine_m IS
+        PORT (
+            m_input : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+            m_output : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+        );
+    END COMPONENT;
+
+BEGIN
+    system_rom : rom
+    PORT MAP(
+        rom_address => s_input,
+        rom_output => system_u
     );
-    end component;
-
-    component machine is
-        port(   m_input : in STD_LOGIC_VECTOR(7 downto 0);
-                m_output : out STD_LOGIC_VECTOR(3 downto 0)
+    system_machine_m : machine_m
+    PORT MAP(
+        m_input => system_u,
+        m_output => s_output
     );
-    end component;
-
-    begin
-        rom_system : rom
-            port map(
-                address => s_input,
-                rom_output => u
-            );
-
-        machine_system : machine
-            port map(
-                m_input => u,
-                m_output => s_output
-            );
-end structural;
+END structural;

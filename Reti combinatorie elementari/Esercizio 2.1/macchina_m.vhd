@@ -1,32 +1,31 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use work.all;
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
 
-entity machine is
-    port(   m_input : in STD_LOGIC_VECTOR(7 downto 0);
-            m_output : out STD_LOGIC_VECTOR(3 downto 0)
+ENTITY machine_m IS
+    PORT (
+        m_input : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+        m_output : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     );
-end machine;
+END machine_m;
 
-architecture structural of machine is
-
-    component bit_manipulator is
-        port(   input_data : in STD_LOGIC_VECTOR(3 downto 0); 
-                output_data : out STD_LOGIC_VECTOR(1 downto 0)
+ARCHITECTURE structural OF machine_m IS
+    COMPONENT bit_manipulator IS
+        PORT (
+            bm_input : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+            bm_output : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
         );
-    end component;
+    END COMPONENT;
 
-    begin
-        machine_0: bit_manipulator
-        port map(
-            input_data => m_input(3 downto 0),
-            output_data => m_output(1 downto 0)
-        );
-
-        machine_1: bit_manipulator
-        port map(
-            input_data => m_input(7 downto 4),
-            output_data => m_output(3 downto 2)
-        );
-
-end structural;
+BEGIN
+    bit_m_0 : bit_manipulator
+    PORT MAP(
+        bm_input => m_input(3 DOWNTO 0),
+        bm_output => m_output(1 DOWNTO 0)
+    );
+    bit_m_1 : bit_manipulator
+    PORT MAP(
+        bm_input => m_input(7 DOWNTO 4),
+        bm_output => m_output(3 DOWNTO 2)
+    );
+END structural;

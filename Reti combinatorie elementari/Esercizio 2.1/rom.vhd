@@ -1,17 +1,18 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
-use work.all;
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
+USE work.ALL;
 
-entity rom is
-    port(   address : in std_logic_vector(3 downto 0);
-            rom_output : out std_logic_vector(7 downto 0)
+ENTITY rom IS
+    PORT (
+        rom_address : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+        rom_output : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
     );
-end entity rom;
+END rom;
 
-architecture RTL of rom is
-    type MEMORY_168 is array (0 to 15) of std_logic_vector(7 downto 0);
-    constant ROM_168 : MEMORY_168 := (
+ARCHITECTURE RTL OF rom IS
+    TYPE MEMORY_16_8 IS ARRAY(0 TO 15) OF STD_LOGIC_VECTOR(7 DOWNTO 0);
+    CONSTANT ROM_16_8 : MEMORY_16_8 := (
         "00010001",
         "00101001",
         "10010100",
@@ -30,6 +31,7 @@ architecture RTL of rom is
         "10000001"
     );
 
-    begin
-        rom_output <= ROM_168(to_integer(unsigned(address)));
-end architecture RTL;
+BEGIN
+    rom_output <= ROM_16_8(to_integer(unsigned(rom_address)));
+
+END ARCHITECTURE RTL;
