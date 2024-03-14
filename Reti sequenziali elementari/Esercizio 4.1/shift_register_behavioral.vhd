@@ -1,6 +1,6 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
-use IEEE.numeric.std.all;
+use IEEE.numeric_std.all;
 
 entity shift_register_behavioral is
     generic (
@@ -15,11 +15,11 @@ entity shift_register_behavioral is
         Y : in STD_LOGIC_VECTOR(1 downto 0);    -- Shift amount
         reg_output : out STD_LOGIC_VECTOR(N-1 downto 0)
     );
-end of shift_register_behavioral;
+end shift_register_behavioral;
 
 architecture behavioral of shift_register_behavioral is
 
-    signal temp_input : STD_LOGIC_VECTOR(N-1 downto 0) := (others = '0');
+    signal temp_input : STD_LOGIC_VECTOR(N-1 downto 0) := (others => '0');
 
     begin
         process(clk, rst)
