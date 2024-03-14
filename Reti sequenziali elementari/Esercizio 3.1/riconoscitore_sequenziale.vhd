@@ -15,7 +15,6 @@ architecture behavioral of riconoscitore_sequenza is
     signal stato_corrente : stato := q0;
     signal stato_prossimo : stato;
     signal uscita_corrente : STD_LOGIC := 'U';
-    signal modalità_corrente : STD_LOGIC := 'U';
 
     begin
         transizione : process(stato_corrente, i, m)
@@ -85,7 +84,6 @@ architecture behavioral of riconoscitore_sequenza is
         begin
             if (a'event and a = '1') then
                 stato_corrente <= stato_prossimo;
-                m <= modalità_corrente;
                 y <= uscita_corrente;
             end if;
         end process;

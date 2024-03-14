@@ -24,10 +24,10 @@ ARCHITECTURE behavioral OF riconoscitore_sequenziale_tb IS
 BEGIN
     uut : riconoscitore_sequenziale
     PORT MAP(
-        i <= input,
-        m <= mode,
-        a <= temp,
-        y <= output
+        i => input,
+        m => mode,
+        a => temp,
+        y => output
     );
 
     temp_process : PROCESS
