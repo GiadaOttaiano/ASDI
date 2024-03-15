@@ -14,8 +14,9 @@ architecture dataflow of encoder_42 is
 
     begin
         encoder_out <= "00" when encoder_in = "0001" else
-                        "01" when encoder_in = "0010" else
-                        "10" when encoder_in = "0100" else
-                        "11" when encoder_in = "1000" else
-                        "--";
+                       "01" when encoder_in = "0010" else
+                       "10" when encoder_in = "0100" else
+                       "11" when encoder_in = "1000" else
+                       "--";
+                       
 end dataflow;

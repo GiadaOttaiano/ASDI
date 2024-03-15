@@ -6,7 +6,8 @@ entity PO_PC is
 
     port(
         pp_clock, pp_start, pp_stop : IN STD_LOGIC;
-        pp_output : OUT STD_LOGIC_VECTOR(3 downto 0)
+        pp_out : OUT STD_LOGIC_VECTOR(3 downto 0);
+        cu_enable_out, cu_write_out, cu_read_out : OUT STD_LOGIC -- Segnali di ritorno per il test bench
     );
 
 end PO_PC;
@@ -24,15 +25,15 @@ architecture structural of PO_PC is
         port(
             c_enable, c_clock, c_reset : IN STD_LOGIC;
             c_control : OUT STD_LOGIC;
-            c_output : OUT STD_LOGIC_VECTOR(3 downto 0)
+            c_out : OUT STD_LOGIC_VECTOR(3 downto 0)
         );
     end component;
 
     component s_system is
         port(
-            s_input : IN STD_LOGIC_VECTOR(3 downto 0);
-            s_clock, s_read : IN STD_LOGIC;
-            s_output : OUT STD_LOGIC_VECTOR(3 downto 0)
+            s_in : IN STD_LOGIC_VECTOR(3 downto 0);
+            s_clock, s_rd : IN STD_LOGIC;
+            s_out : OUT STD_LOGIC_VECTOR(3 downto 0)
         );
     end component;
 
@@ -44,8 +45,8 @@ architecture structural of PO_PC is
         );
     end component;
 
-    signal c_ctr, cu_wr_mem, cu_rd_rom, cu_en_count, cu_reset_count : STD_LOGIC := '0';
-    signal c_address, s_data : STD_LOGIC_VECTOR(3 downto 0) := (others => '0');
+    signal control, read, write, enable, reset : STD_LOGIC := '0';
+    signal address, data : STD_LOGIC_VECTOR(3 downto 0) := (others => '0');
 
     begin
         cu : control
@@ -53,36 +54,41 @@ architecture structural of PO_PC is
                 cu_start => pp_start,
                 cu_clock => pp_clock,
                 cu_stop => pp_stop,
-                cu_control => c_ctr,
-                cu_read => cu_rd_rom,
-                cu_write => cu_wr_rom,
-                cu_enable => cu_en_count,
-                cu_reset => cu_reset_count
+                cu_control => control,
+                cu_read => read,
+                cu_write => write,
+                cu_enable => enable,
+                cu_reset => reset
             );
 
         counter : counter_mod_16
             port map(
-                c_enable => cu_en_count,
+                c_enable => enable,
                 c_clock => pp_clock,
-                c_reset => cu_reset_count,
-                c_control => c_ctr,
-                c_output => c_address
+                c_reset => reset,
+                c_control => control,
+                c_output => address
             );
         
         s : s_system
             port map(
-                s_input => c_address,
+                s_input => address,
                 s_clock => pp_clock,
-                s_read => cu_rd_rom,
-                s_output => s_data
+                s_read => read,
+                s_output => data
             );
         
         mem : memory
             port map(
-                mem_address => c_address,
-                mem_data => s_data,
-                mem_wr => cu_wr_mem,
+                mem_address => address,
+                mem_data => data,
+                mem_wr => write,
                 mem_clock => pp_clock,
                 mem_out => pp_out
             );
+
+        -- Segnali di ritorno
+        cu_enable_out <= enable;
+        cu_write_out <= write;
+        cu_read_out <= read;
 end structural;

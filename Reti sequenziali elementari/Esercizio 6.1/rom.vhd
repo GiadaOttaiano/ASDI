@@ -5,9 +5,9 @@ use IEEE.numeric_std.all;
 entity rom is
     port(
         rom_address : IN STD_LOGIC_VECTOR(3 downto 0);
-        rom_clk : IN STD_LOGIC;
-        rom_read : IN STD_LOGIC;
-        rom_output : OUT STD_LOGIC_VECTOR(7 downto 0)
+        rom_clock : IN STD_LOGIC;
+        rom_rd : IN STD_LOGIC;
+        rom_out : OUT STD_LOGIC_VECTOR(7 downto 0)
     );
 end rom;
 
@@ -33,11 +33,11 @@ architecture dataflow of rom is
     );
 
     begin
-        process(rom_clk)
+        process(rom_clock)
             begin
-                if rising_edge(rom_clk) then
-                    if rom_read = '1' then
-                    rom_output <= ROM_16_8(to_integer(unsigned(rom_address)));
+                if rising_edge(rom_clock) then
+                    if rom_rd = '1' then
+                        rom_out <= ROM_16_8(to_integer(unsigned(rom_address)));
                     end if;
                 end if;
     end process;

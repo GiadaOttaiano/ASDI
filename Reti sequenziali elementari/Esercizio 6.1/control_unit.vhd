@@ -31,12 +31,18 @@ architecture behavioral of control_unit is
                             next_state <= IDLE;
                         end if;                   
                     when RUNNING =>
-                        if cu_stop = '1' or cu_control = '1' then
+                        if cu_stop = '1' then       
                             next_state <= STOPPED;
                         else 
                             cu_enable <= '1';
                             cu_read <= '1';
                             cu_write <= '1';
+
+                            if cu_control = '1' then        -- Tutte le locazioni sono state visitate
+                                next_state <= STOPPED;
+                            else
+                                next_state <= RUNNING;
+                            end if;
                         end if;               
                     when STOPPED =>
                         next_state <= IDLE;
@@ -44,8 +50,6 @@ architecture behavioral of control_unit is
                         cu_enable <= '0';
                         cu_read <= '0';
                         cu_write <= '0';
-                    when OTHERS =>
-                        NULL;
                 end case;
             end if;
         end process;
