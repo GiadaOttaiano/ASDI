@@ -39,6 +39,6 @@ BEGIN
     END PROCESS;
 
     count <= to_integer(unsigned(counter)); -- Output del valore del contatore
-    carry_out <= '1' WHEN unsigned(counter) = MAX ELSE '0';
+    carry_out <= '1' WHEN unsigned(counter) = MAX AND enable = '1' ELSE '0';
 
 END behavioral;

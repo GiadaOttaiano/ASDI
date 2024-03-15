@@ -1,8 +1,0 @@
-# compile vhdl design source files
-vhdl xil_defaultlib  \
-"../../../../11_CRONOMETRO.srcs/sources_1/imports/10_SISTEMA/contatore_modn.vhd" \
-"../../../../11_CRONOMETRO.srcs/sources_1/new/cronometro.vhd" \
-"../../../../11_CRONOMETRO.srcs/sources_1/new/cronometro_tb.vhd" \
-
-# Do not sort compile order
-nosort
