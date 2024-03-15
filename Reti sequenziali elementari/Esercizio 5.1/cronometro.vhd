@@ -13,7 +13,7 @@ ENTITY cronometro IS
         seconds_in : IN STD_LOGIC_VECTOR(5 downto 0); -- Secondi iniziali
         hours_out : OUT INTEGER RANGE 0 TO 23; -- Ore del cronometro
         minutes_out : OUT INTEGER RANGE 0 TO 59; -- Minuti del cronometro
-        seconds_out : OUT INTEGER RANGE 0 TO 59; -- Secondi del cronometro
+        seconds_out : OUT INTEGER RANGE 0 TO 59 -- Secondi del cronometro
     );
 END cronometro;
 
