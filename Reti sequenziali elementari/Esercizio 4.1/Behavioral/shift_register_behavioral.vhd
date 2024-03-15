@@ -11,7 +11,7 @@ entity shift_register_behavioral is
         reg_input : in STD_LOGIC;
         clk : in STD_LOGIC;
         rst : in STD_LOGIC;
-        shift_dir : in STD_LOGIC;
+        shift_dir : in STD_LOGIC;       -- Shift a destra o shift a sinistra
         Y : in STD_LOGIC_VECTOR(1 downto 0);    -- Shift amount
         reg_output : out STD_LOGIC_VECTOR(N-1 downto 0)
     );
