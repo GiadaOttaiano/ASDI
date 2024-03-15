@@ -72,10 +72,10 @@ architecture structural of PO_PC is
         
         s : s_system
             port map(
-                s_input => address,
+                s_in => address,
                 s_clock => pp_clock,
-                s_read => read,
-                s_output => data
+                s_rd => read,
+                s_out => data
             );
         
         mem : memory
