@@ -22,7 +22,7 @@ architecture behavioral of counter_mod_16 is
             if c_reset = '1' then
                 counter <= (others => '0');
                 if rising_edge(c_clock) and c_enable = '1' then
-                    if unsigned(counter) = 15 then
+                    if counter = "1111" then
                         counter <= (others => '0');
                     else
                         counter <= std_logic_vector(unsigned(counter) + 1);
@@ -33,7 +33,7 @@ architecture behavioral of counter_mod_16 is
         end process;
 
         c_output <= counter;
-        c_control <= '1' WHEN unsigned(counter) = MAX AND c_enable = '1' ELSE 
+        c_control <= '1' WHEN counter = "1111" = MAX AND c_enable = '1' ELSE 
                      '0';
 
 end behavioral;
