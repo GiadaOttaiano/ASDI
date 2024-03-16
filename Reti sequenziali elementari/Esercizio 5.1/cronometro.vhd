@@ -39,17 +39,17 @@ architecture structural of cronometro is
 
     begin
 
-        contatore_secondi : contatore_mod_n
-            generic map(6, 59)
+        contatore_ore : contatore_mod_n
+            generic map(5, 23)
             port map(
-                init => seconds_in,
+                init => hours_in,
                 clock => clock,
                 set => set,
                 reset => reset,
-                enable => start,
-                carry_out => enable_m,
-                count => seconds_out
+                enable => enable_h,
+                count => hours_out
             );
+
         contatore_minuti : contatore_mod_n
             generic map(6, 59)
             port map(
@@ -61,14 +61,18 @@ architecture structural of cronometro is
                 carry_out => enable_h,
                 count => minutes_out
             );
-        contatore_ore : contatore_mod_n
-            generic map(5, 23)
+
+        contatore_secondi : contatore_mod_n
+            generic map(6, 59)
             port map(
-                init => hours_in,
+                init => seconds_in,
                 clock => clock,
                 set => set,
                 reset => reset,
-                enable => enable_h,
-                count => hours_out
+                enable => start,
+                carry_out => enable_m,
+                count => seconds_out
             );
+        
+        
 end structural;

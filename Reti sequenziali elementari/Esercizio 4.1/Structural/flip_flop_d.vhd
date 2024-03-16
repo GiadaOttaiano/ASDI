@@ -9,7 +9,7 @@ entity flip_flop_d is
     );
 end flip_flop_d;
 
-architecture Behavioral of flip_flop_d is
+architecture dataflow of flip_flop_d is
 begin
     process(clk)
     begin
