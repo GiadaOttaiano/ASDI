@@ -1,5 +1,5 @@
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 entity PO_PC is
@@ -49,7 +49,7 @@ architecture structural of PO_PC is
     signal address, data : STD_LOGIC_VECTOR(3 downto 0) := (others => '0');
 
     begin
-        cu : control
+        cu : control_unit
             port map(
                 cu_start => pp_start,
                 cu_clock => pp_clock,
@@ -67,7 +67,7 @@ architecture structural of PO_PC is
                 c_clock => pp_clock,
                 c_reset => reset,
                 c_control => control,
-                c_output => address
+                c_out => address
             );
         
         s : s_system

@@ -1,5 +1,5 @@
 library IEEE;
-use IEEE.STD_LOGIC_1644.all;
+use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 entity rom is
@@ -35,8 +35,7 @@ architecture dataflow of rom is
     begin
         process(rom_clock)
             begin
-                if rising_edge(rom_clock) then
-                    if rom_rd = '1' then
+                if rising_edge(rom_clock) and rom_rd = '1' then
                         rom_out <= ROM_16_8(to_integer(unsigned(rom_address)));
                     end if;
                 end if;

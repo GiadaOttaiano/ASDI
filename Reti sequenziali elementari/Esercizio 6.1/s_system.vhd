@@ -17,7 +17,7 @@ architecture structural of s_system is
     component rom is
         port(
             rom_address : IN STD_LOGIC_VECTOR(3 downto 0);
-            rom_clk : IN STD_LOGIC;
+            rom_clock : IN STD_LOGIC;
             rom_rd : IN STD_LOGIC;
             rom_out : OUT STD_LOGIC_VECTOR(7 downto 0)
         );
