@@ -46,7 +46,7 @@ BEGIN
 
         pp_start_tb <= '1';
 
-        WAIT FOR 1000 ns;
+        WAIT FOR 200 ns;
 
         pp_start_tb <= '0';
         pp_stop_tb <= '1';
