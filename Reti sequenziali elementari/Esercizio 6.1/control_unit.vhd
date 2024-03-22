@@ -25,7 +25,7 @@ architecture behavioral of control_unit is
             end if;
         end process;
 
-        automa : process(state, cu_start, cu_stop, cu_control)
+        automa : process(current_state, cu_start, cu_stop, cu_control)
             begin
                 case current_state is
                     when IDLE =>
