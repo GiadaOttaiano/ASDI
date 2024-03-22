@@ -1,37 +1,34 @@
-library IEEE;
-use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
 
-entity shift_register is
-    port(
-        sr_parallel_input : IN std_logic_vector(16 downto 0);
-        sr_serial_input : IN std_logic;
-        sr_clock, sr_reset, sr_load, sr_shift : IN std_logic;
-        sr_parallel_output : OUT std_logic_vector(16 downto 0)
+ENTITY shift_register IS
+    PORT (
+        sr_parallel_in : IN STD_LOGIC_VECTOR(16 DOWNTO 0);
+        sr_serial_in : IN STD_LOGIC;
+        sr_clock, sr_reset, sr_load, sr_shift : IN STD_LOGIC;
+        sr_out : OUT STD_LOGIC_VECTOR(16 DOWNTO 0)
     );
-end shift_register;
+END shift_register;
 
-architecture behavioral of shift_register is
+ARCHITECTURE behavioral OF shift_register IS
 
-    signal temp : std_logic_vector(16 downto 0);
+    SIGNAL temp : STD_LOGIC_VECTOR(16 DOWNTO 0) := (OTHERS => '0');
 
-    begin
-        process(sr_clock)
-            begin
-                if rising_edge(sr_clock) then
-                    if sr_reset = '1' then
-                        temp <= (others => '0');
-                    else
-                        if sr_load = '1' then
-                            temp <= sr_parallel_input;
-                elsif sr_shift = '1' then
-                    temp(15 downto 0) <= temp(16 downto 1);
-                    temp(16) <= sr_serial_input;
-                    end if;
-                end if;
-            end if;
-        end process;
+BEGIN
+    PROCESS (sr_clock, sr_reset)
+    BEGIN
+        IF sr_reset = '1' THEN
+            temp <= (OTHERS => '0');
+        ELSIF rising_edge(sr_clock) THEN
+            IF sr_load = '1' THEN
+                temp <= sr_parallel_in;
+            END IF;
+            IF sr_shift = '1' THEN
+                temp <= sr_serial_in & temp(16 DOWNTO 1);
+            END IF;
+        END IF;
+    END PROCESS;
 
-    sr_parallel_output <= temp;
-
-end behavioral;
+    sr_out <= temp;
+END behavioral;

@@ -1,32 +1,33 @@
-library IEEE;
-use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
 
-entity counter_mod_8 is
-    port(
-        c_in, c_clock, c_reset : IN std_logic;
-        c_out : out std_logic_vector(2 downto 0)
+ENTITY counter_mod_8 IS
+    PORT (
+        c_in, c_clock, c_reset : IN STD_LOGIC;
+        c_out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
     );
-end counter_mod_8;
 
-architecture behavioral of counter_mod_8 is
+END counter_mod_8;
 
-    signal count : std_logic_vector(2 downto 0) := (others => '0');
+ARCHITECTURE behavioral OF counter_mod_8 IS
 
-    begin
-        process(c_clock)
-        begin  
-            if rising_edge(c_clock) then
-                if c_reset = '1' then
-                    count <= (others => '0');
-                else
-                    if c_in = '1' then
-                        count <= std_logic_vector(unsigned(count) + 1);
-                    end if;
-                end if;
-            end if;
-        end process;
+    SIGNAL counter : STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
 
-        c_out <= count;
+BEGIN
+    PROCESS (c_clock, c_reset)
+    BEGIN
+        IF rising_edge(c_clock) THEN 
+            IF c_reset = '1' THEN
+            counter <= (OTHERS => '0');
+            ELSE
+                IF c_in = '1' THEN
+                    counter <= STD_LOGIC_VECTOR(unsigned(counter) + 1);
+                END IF;
+            END IF;
+        END IF;
+END PROCESS;
 
-end behavioral;
+c_out <= counter;
+
+END behavioral;

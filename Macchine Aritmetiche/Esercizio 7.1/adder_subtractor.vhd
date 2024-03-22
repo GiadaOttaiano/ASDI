@@ -1,34 +1,36 @@
-library IEEE;
-use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
 
-entity adder_subtractor is
-    port(
-        as_in_1, as_in_2 : IN std_logic_vector(7 downto 0);
-        as_cin : IN std_logic;
-        as_cout : OUT std_logic;
-        as_out : OUT std_logic_vector(7 downto 0)
+ENTITY adder_subtractor IS
+    PORT (
+        as_in_1, as_in_2 : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+        as_c_in : IN STD_LOGIC;
+        as_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+        as_c_out : OUT STD_LOGIC
     );
-end adder_subtractor;
+END adder_subtractor;
 
-architecture structural of adder_subtractor is
-
-    component ripple_carry is
-        port(
-            rc_in_1, rc_in_2 : IN std_logic_vector(7 downto 0);
-            rc_cin : IN std_logic;
-            rc_cout : OUT std_logic;
-            rc_out : OUT std_logic_vector(7 downto 0)
+ARCHITECTURE structural OF adder_subtractor IS
+    COMPONENT ripple_carry_adder IS
+        PORT (
+            rc_in_1, rc_in_2 : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+            rc_c_in : IN STD_LOGIC;
+            rc_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+            rc_c_out : OUT STD_LOGIC
         );
-    end component;
+    END COMPONENT;
 
-    signal complementoy : std_logic_vector(7 downto 0);
+    SIGNAL complementoy : STD_LOGIC_VECTOR(7 DOWNTO 0) := (OTHERS => '0');
 
-    begin 
-        complemento_y : FOR i IN 0 TO 7 GENERATE
-                        complementoy(i) <= as_in_2(i) XOR as_cin;
-                        END GENERATE;
+BEGIN
+    complemento_y : FOR i IN 0 TO 7 GENERATE
+        complementoy(i) <= as_in_2(i) XOR as_c_in;
+    END GENERATE;
 
-        RA : ripple_carry
-            port map(as_in_1, complementoy, as_cin, as_cout, as_out);
-end structural;
+    RA : ripple_carry_adder
+    PORT MAP(
+        as_in_1, complementoy, as_c_in, as_out, as_c_out
+    );
+
+END structural;

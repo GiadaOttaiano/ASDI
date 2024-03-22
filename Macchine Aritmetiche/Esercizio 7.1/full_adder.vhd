@@ -1,19 +1,17 @@
-library IEEE;
-use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
 
-entity full_adder is
-    port(
-        fa_in_1, fa_in_2, fa_cin : IN std_logic;
-        fa_cout, fa_out : OUT std_logic
+ENTITY full_adder IS
+    PORT (
+        fa_in_1, fa_in_2, fa_c_in : IN STD_LOGIC;
+        fa_out, fa_c_out : OUT STD_LOGIC
     );
-end full_adder;
+END full_adder;
 
-architecture dataflow of full_adder is
+ARCHITECTURE dataflow OF full_adder IS
 
-    begin 
-
-        fa_out <= ((fa_in_1 XOR fa_in_2) XOR fa_cin);
-        fa_cout <= ((fa_in_1 AND fa_in_2) OR (fa_cin AND (fa_in_1 XOR fa_in_2)));
-
-end dataflow;
+BEGIN
+    fa_out <= ((fa_in_1 XOR fa_in_2) XOR fa_c_in);
+    fa_c_out <= ((fa_in_1 AND fa_in_2) OR (fa_c_in AND (fa_in_1 XOR fa_in_2)));
+END dataflow;

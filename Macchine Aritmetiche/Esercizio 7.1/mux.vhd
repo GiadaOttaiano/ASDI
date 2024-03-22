@@ -1,21 +1,21 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.NUMERIC_STD.ALL;
 
-entity mux is
-    generic (width : integer range 0 to 17 := 8);
-	port( 
-        mux_in_1, mux_in_2 : IN std_logic_vector(width - 1 downto 0); 
-		mux_sel : IN std_logic;
-		mux_out : OUT std_logic_vector(width - 1 downto 0)
+ENTITY mux IS
+    GENERIC (width : INTEGER RANGE 0 TO 17 := 8);
+    PORT (
+        mux_in_1, mux_in_2 : IN STD_LOGIC_VECTOR(width - 1 DOWNTO 0);
+        mux_sel : IN STD_LOGIC;
+        mux_out : OUT STD_LOGIC_VECTOR(width - 1 DOWNTO 0)
     );
-end mux;
+END mux;
 
-architecture rtl of mux_21 is
+ARCHITECTURE rtl OF mux IS
 
-	begin
-	
-        mux_out <= mux_in_1 when mux_sel = '0' else 
-        mux_in_2 when mux_sel = '1' else
-            (others => '0');
-end rtl;
+BEGIN
+
+    mux_out <= mux_in_1 WHEN mux_sel = '0' ELSE
+        mux_in_2 WHEN mux_sel = '1' ELSE
+        (OTHERS => '0');
+END rtl;
