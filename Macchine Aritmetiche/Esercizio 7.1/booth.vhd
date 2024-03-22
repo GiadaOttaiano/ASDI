@@ -8,7 +8,7 @@ entity booth_multiplier is
         clock, reset, start : IN std_logic;
         P : OUT std_logic_vector(15 downto 0);
         stop : OUT std_logic
-    ):
+    );
 end booth_multiplier;
 
 architecture structural of booth_multiplier is
@@ -18,8 +18,8 @@ architecture structural of booth_multiplier is
             Q : IN std_logic_vector(1 downto 0);
             cu_clock, cu_start, cu_reset : IN std_logic;
             cu_count : IN std_logic_vector(2 downto 0);
-            cu_loadAQ, cu_count_in, cu_shift, cu_loadM, cu_selAQ, cu_sub, cu_stop: OUT std_logic;
-        )
+            cu_loadAQ, cu_count_in, cu_shift, cu_loadM, cu_selAQ, cu_sub, cu_stop: OUT std_logic
+        );
     end component;
 
     component OU is
@@ -61,11 +61,10 @@ architecture structural of booth_multiplier is
                 ou_reset => reset,
                 ou_loadAQ => loadAQ,
                 ou_count_in => count_in,
-                ou_shift => shift
+                ou_shift => shift,
                 ou_sub => sub,
                 ou_loadM => loadM,
-                ou_selAQ => selAQ,
-                ou_count_in => count_in, 
+                ou_selAQ => selAQ, 
                 ou_result => tempP,
                 ou_count => temp_count
             );

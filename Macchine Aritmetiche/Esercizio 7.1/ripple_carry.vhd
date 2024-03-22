@@ -24,7 +24,7 @@ architecture structural of ripple_carry is
 
     begin
         FA0 : full_adder
-            port map(rc_in_1(0), rc_in_2(0), rc_in, temp(0), rc_out(0));
+            port map(rc_in_1(0), rc_in_2(0), rc_cin, temp(0), rc_out(0));
 
         FA1to6 : FOR i IN 1 TO 6 GENERATE
                 FA : full_adder port map(rc_in_1(i), rc_in_2(i), temp(i-1), temp(i), rc_out(i));

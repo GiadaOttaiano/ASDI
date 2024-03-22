@@ -14,6 +14,6 @@ architecture dataflow of full_adder is
     begin 
 
         fa_out <= ((fa_in_1 XOR fa_in_2) XOR fa_cin);
-        fa_cout <= ((fa_in_1 AND fa_in_2) OR (fa_c_in AND (fa_in_1 XOR fa_in_2)));
+        fa_cout <= ((fa_in_1 AND fa_in_2) OR (fa_cin AND (fa_in_1 XOR fa_in_2)));
 
 end dataflow;

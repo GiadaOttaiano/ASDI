@@ -7,8 +7,8 @@ entity CU is
         Q : IN std_logic_vector(1 downto 0);
         cu_clock, cu_start, cu_reset : IN std_logic;
         cu_count : IN std_logic_vector(2 downto 0);
-        cu_loadAQ, cu_count_in, cu_shift, cu_loadM, cu_selAQ, cu_sub, cu_stop: OUT std_logic;
-    )
+        cu_loadAQ, cu_count_in, cu_shift, cu_loadM, cu_selAQ, cu_sub, cu_stop: OUT std_logic
+    );
 end CU;
 
 architecture behavioral of CU is
@@ -17,7 +17,7 @@ architecture behavioral of CU is
     signal current_state, next_state : state;
 
     begin
-        state_transition : process(clock) --processo per effettuare il cambio di stato.
+        state_transition : process(cu_clock) --processo per effettuare il cambio di stato.
         begin
             if rising_edge(cu_clock) then
                 if cu_reset = '1' then 
@@ -38,7 +38,6 @@ architecture behavioral of CU is
             cu_stop <= '0';  
             cu_shift <= '0';
 
-            begin
                 case current_state is
                     when IDLE => 
                         if cu_start = '1' then

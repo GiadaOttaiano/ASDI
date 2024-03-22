@@ -15,7 +15,7 @@ architecture structural of OU is
 
     component adder_subtractor is
         port(
-            as_in_1, as_in_2 : IN std_logic_logic(7 downto 0);
+            as_in_1, as_in_2 : IN std_logic_vector(7 downto 0);
             as_cin : IN std_logic;
             as_cout : OUT std_logic;
             as_out : OUT std_logic_vector(7 downto 0)
@@ -66,9 +66,9 @@ architecture structural of OU is
 	
     begin
 
-        AQ_init <= "00000000" & ou_in_1 & "0"; 
-
         M: register_8 port map(ou_in_2, ou_clock, ou_reset, ou_loadM, m_reg);
+        
+        AQ_init <= "00000000" & ou_in_1 & "0"; 
         
         AQ_sum_in <= partial & AQ_out(8 downto 0); 
         
@@ -78,7 +78,7 @@ architecture structural of OU is
             
         SR: shift_register port map(AQ_in, sr_s_in, ou_clock, ou_reset, ou_loadAQ, ou_shift, AQ_out);
         
-        ADD_SUB: adder_subtractor port map(AQ_out(16 downto 9), m_reg, ou_sub, partial, carry);
+        ADD_SUB : adder_subtractor port map(AQ_out(16 downto 9), m_reg, ou_sub, carry, partial);
         
         CONT: counter_mod_8 port map(ou_clock, ou_reset, ou_count_in, ou_count);
         

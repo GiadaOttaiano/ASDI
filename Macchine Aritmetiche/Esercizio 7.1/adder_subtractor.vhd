@@ -4,7 +4,7 @@ use IEEE.numeric_std.all;
 
 entity adder_subtractor is
     port(
-        as_in_1, as_in_2 : IN std_logic_logic(7 downto 0);
+        as_in_1, as_in_2 : IN std_logic_vector(7 downto 0);
         as_cin : IN std_logic;
         as_cout : OUT std_logic;
         as_out : OUT std_logic_vector(7 downto 0)
@@ -30,5 +30,5 @@ architecture structural of adder_subtractor is
                         END GENERATE;
 
         RA : ripple_carry
-            port map(as_in_1, complemento_y, as_cin, as_cout, as_out);
+            port map(as_in_1, complementoy, as_cin, as_cout, as_out);
 end structural;

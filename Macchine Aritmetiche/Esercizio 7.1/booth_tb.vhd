@@ -53,7 +53,7 @@ BEGIN
         inputx <= "00001111";
         inputy <= "00000011";
 
-        -- start deve essere visto da clk_div: poichè sarà generato dal button debouncer si aggiungerà anche il clk_div
+        -- start deve essere visto da clk_div: poichÃ¨ sarÃ  generato dal button debouncer si aggiungerÃ  anche il clk_div
         -- al button debouncer e il segnale di start deve durare quanto il periodo del clk rallentato
         WAIT FOR 40 ns;
         start <= '1';
