@@ -13,43 +13,54 @@ end control_unit;
 
 architecture behavioral of control_unit is
 
-    type state is (IDLE, RUNNING, STOPPED);
+    type state is (IDLE, READING, RUNNING, WRITING, STOPPED);
     signal current_state : state := IDLE;
     signal next_state : state := IDLE;
 
     begin
-        process(cu_clock)
+        state_transition : process(cu_clock)
         begin
             if rising_edge(cu_clock) then
                 current_state <= next_state;
+            end if;
+        end process;
 
+        automa : process(state, cu_start, cu_stop, cu_control)
+            begin
                 case current_state is
                     when IDLE =>
+                        cu_reset <= '0';
+
                         if cu_start = '1' then
-                            next_state <= RUNNING;
+                            next_state <= READING;
+                            cu_read = '1';
                         else
                             next_state <= IDLE;
-                        end if;                   
-                    when RUNNING =>
-                        if cu_stop = '1' then       
-                            next_state <= STOPPED;
-                        else 
-                            cu_enable <= '1';
-                            cu_read <= '1';
-                            cu_write <= '1';
+                        end if; 
+                        
+                    when READING =>
+                        next_state <= RUNNING;
+                        cu_read = '0';
 
-                            if cu_control = '1' then        -- Tutte le locazioni sono state visitate
-                                next_state <= STOPPED;
-                            else
-                                next_state <= RUNNING;
-                            end if;
-                        end if;               
-                    when STOPPED =>
-                        next_state <= IDLE;
-                        cu_reset <= '1';
-                        cu_enable <= '0';
-                        cu_read <= '0';
+                    when RUNNING =>
+                        next_state <= WRITING;
+                        cu_write <= '1';
+
+                    when WRITING =>
+                        next_state <= STOPPED;
                         cu_write <= '0';
+                        cu_enable <= '1';
+                
+                    when STOPPED =>
+                        cu_enable <= '0';
+
+                        if cu_stop = '1' OR cu_control = '1' then
+                            next_state <= IDLE;
+                            cu_reset <= '1';
+                        else
+                            next_state <= READ;
+                            cu_read <= '1';
+                        end if;
                 end case;
             end if;
         end process;
