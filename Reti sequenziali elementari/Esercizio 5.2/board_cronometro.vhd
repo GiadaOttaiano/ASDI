@@ -2,44 +2,44 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-entity cronometro_board is
+entity cronometro_on_board is
     port (
-        rst_tot : in STD_LOGIC;
-        clk_tot : in STD_LOGIC;
+        rst, clk : in STD_LOGIC;
         anodes_out : out STD_LOGIC_VECTOR (7 downto 0);
         cathodes_out : out STD_LOGIC_VECTOR (7 downto 0);
         bottone_secondi : in STD_LOGIC;
         bottone_minuti : in STD_LOGIC;
         bottone_ore : in STD_LOGIC;
-        set_s : in std_logic_vector(5 downto 0);
-        set_m : in std_logic_vector(5 downto 0);
-        set_o : in std_logic_vector(3 downto 0)
+        hours_in : IN STD_LOGIC_VECTOR(4 downto 0); 
+        minutes_in : IN STD_LOGIC_VECTOR(5 downto 0); 
+        seconds_in : IN STD_LOGIC_VECTOR(5 downto 0)
     );
-end cronometro_board;
+end cronometro_on_board;
 
-architecture structural of cronometro_board is
+architecture structural of cronometro_on_board is
 
-    component cont_mod_n is
-        generic(
-            N : positive := 2;
-            max : positive := 60
+    component contatore_mod_n is
+        GENERIC (
+            N : POSITIVE := 6; 
+            MAX : POSITIVE := 60
         );
-        port( 
+
+        PORT (
             bottone_load: in std_logic;
-            init : in std_logic_vector(N-1 downto 0);
-            clock, reset: in std_logic;
-            count_in: in std_logic;
-            count: out std_logic_vector(N-1 downto 0);
-            y : out std_logic
+            init : IN STD_LOGIC_VECTOR(N - 1 downto 0); 
+            clock : IN STD_LOGIC; 
+            set : IN STD_LOGIC; 
+            reset : IN STD_LOGIC; 
+            enable : IN STD_LOGIC;
+            carry_out : OUT STD_LOGIC; 
+            count : OUT INTEGER RANGE 0 TO MAX
         );
     end component;
 
     component button_debouncer
         generic (
-            CLK_period: integer := 10; -- Period of the
-            board’s clock in nanoseconds
-            btn_noise_time: integer := 10000000 -- Estimated
-            button bounce duration in nanoseconds
+            CLK_period: integer := 10; -- Period of the board’s clock in nanoseconds
+            btn_noise_time: integer := 10000000 -- Estimated button bounce duration in nanoseconds
         );
         port (
             RST : in STD_LOGIC;
@@ -77,31 +77,26 @@ architecture structural of cronometro_board is
         );
     end component;
 
-    component convertitore is
-        Port (
-            secondi : in std_logic_vector(5 downto 0);
-            minuti : in std_logic_vector(5 downto 0);
-            ore : in std_logic_vector(3 downto 0);
-            uscita : out std_logic_vector(31 downto 0)
+    component converter is
+        port(
+            seconds, minutes : IN std_logic_vector(5 downto 0);
+            hours : IN std_logic_vector(3 downto 0);
+            output : OUT std_logic_vector(31 downto 0)
         );
     end component;
 
-    signal abilita_minuti : std_logic;
-    signal abilita_ore : std_logic;
+    signal enable_m, enable_h : STD_LOGIC := '0';
     signal temp : std_logic;
 
-    signal bottone_s_pulito : std_logic;
-    signal bottone_m_pulito : std_logic;
-    signal bottone_o_pulito : std_logic;
-    signal bottone_rst_pulito : std_logic;
+    signal cleared_seconds_b, cleared_minutes_b, cleared_hours_b, cleared_reset_b : std_logic;
 
     signal val_32bit : std_logic_vector(31 downto 0);
 
     signal temp_s : std_logic_vector(5 downto 0) := (others => '0');
     signal temp_m : std_logic_vector(5 downto 0) := (others => '0');
-    signal temp_o : std_logic_vector(3 downto 0) := (others => '0');
+    signal temp_h : std_logic_vector(4 downto 0) := (others => '0');
 
-    signal clock_filtrato : std_logic;
+    signal filtered_clock : std_logic;
 
     begin
 
@@ -112,8 +107,8 @@ architecture structural of cronometro_board is
             )
             port map(
                 clock_in => clk_tot,
-                reset => bottone_rst_pulito,
-                clock_out => clock_filtrato
+                reset => cleared_reset_b,
+                clock_out => filtered_clock
             );
 
         cont_secondi: cont_mod_n
@@ -122,13 +117,13 @@ architecture structural of cronometro_board is
                 max => 60
             )
             port map (
-                bottone_load => bottone_s_pulito,
+                bottone_load => cleared_seconds_b,
                 init => set_s,
                 clock => clk_tot,
-                reset => bottone_rst_pulito,
-                count_in => clock_filtrato,
+                reset => cleared_reset_b,
+                count_in => filtered_clock,
                 count => temp_s,
-                y => abilita_minuti
+                y => enable_m
             );
 
         cont_minuti: cont_mod_n
@@ -137,13 +132,13 @@ architecture structural of cronometro_board is
                 max => 60
             )
             port map (
-                bottone_load => bottone_m_pulito,
+                bottone_load => cleared_minutes_b,
                 init => set_m,
                 clock => clk_tot,
-                reset => bottone_rst_pulito,
-                count_in => abilita_minuti,
+                reset => cleared_reset_b,
+                count_in => enable_m,
                 count => temp_m,
-                y => abilita_ore
+                y => enable_h
             );
 
         cont_ore: cont_mod_n
@@ -152,11 +147,11 @@ architecture structural of cronometro_board is
                 max => 12
             )
             port map (
-                bottone_load => bottone_o_pulito,
+                bottone_load => cleared_hours_b,
                 init => set_o,
                 clock => clk_tot,
-                reset => bottone_rst_pulito,
-                count_in => abilita_ore,
+                reset => cleared_reset_b,
+                count_in => enable_h,
                 count => temp_o,
                 y => temp
             );
@@ -170,7 +165,7 @@ architecture structural of cronometro_board is
                 RST => '0','
                 CLK => clk_tot,
                 BTN => bottone_secondi,
-                CLEARED_BTN => bottone_s_pulito
+                CLEARED_BTN => cleared_seconds_b
             );
 
         de_B_min: button_debouncer
@@ -182,7 +177,7 @@ architecture structural of cronometro_board is
                 RST => '0'',
                 CLK => clk_tot,
                 BTN => bottone_minuti,
-                CLEARED_BTN => bottone_m_pulito
+                CLEARED_BTN => cleared_minutes_b
             );
 
         de_B_ore: button_debouncer
@@ -194,7 +189,7 @@ architecture structural of cronometro_board is
                 RST => '0',
                 CLK => clk_tot,
                 BTN => bottone_ore,
-                CLEARED_BTN => bottone_o_pulito
+                CLEARED_BTN => cleared_hours_b
             );
 
         de_B_rst: button_debouncer
@@ -206,7 +201,7 @@ architecture structural of cronometro_board is
                 RST => '0',
                 CLK => clk_tot,
                 BTN => rst_tot,
-                CLEARED_BTN => bottone_rst_pulito
+                CLEARED_BTN => cleared_reset_b
             );
 
         input_display : convertitore
