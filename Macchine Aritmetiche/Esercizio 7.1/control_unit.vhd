@@ -17,7 +17,7 @@ architecture behavioral of CU is
     signal current_state, next_state : state;
 
     begin
-        state_transition : process(cu_clock) --processo per effettuare il cambio di stato.
+        state_transition : process(cu_clock)
         begin
             if rising_edge(cu_clock) then
                 if cu_reset = '1' then 
@@ -38,47 +38,53 @@ architecture behavioral of CU is
             cu_stop <= '0';  
             cu_shift <= '0';
 
-                case current_state is
-                    when IDLE => 
-                        if cu_start = '1' then
-                            next_state <= FETCH;
-                        else
-                            next_state <= IDLE;
-                        end if;
-                    when FETCH => 
-                        cu_loadM <= '1';
-                        cu_loadAQ <= '1';
+            case current_state is
+                when IDLE => 
+                    if cu_start = '1' then
+                        next_state <= FETCH;
+                    else
+                        next_state <= IDLE;
+                    end if;
 
-                        next_state <= WAIT_F;
-                    when WAIT_F =>
-                        next_state <= SCAN;
-                    when SCAN => 
-                        if(Q = "01") then  -- somma + shift.
-                            cu_selAQ <= '1';
-                            cu_loadAQ <= '1'; 
-                            next_state <= RSHIFT;
-                        elsif(Q = "10") then -- sottrazione + shift.
-                            cu_sub <= '1';  
-                            cu_selAQ <= '1';
-                            cu_loadAQ <= '1'; 
-                            next_state <= RSHIFT;
-                        elsif (Q = "00" OR Q = "11") then -- shift.
-                            next_state <= RSHIFT;
-                        end if;
-                    when RSHIFT =>
-                        cu_shift <= '1';
+                when FETCH => 
+                    cu_loadM <= '1';
+                    cu_loadAQ <= '1';
 
-                        if cu_count = "111" then
-                            next_state <= STOP;
-                        else
-                            next_state <= INCREMENT;
-                        end if;
-                    when INCREMENT =>
-                        cu_count_in <= '1';
-                        next_state <= SCAN;
-                    when STOP => 
+                    next_state <= WAIT_F;
+
+                when WAIT_F =>
+                    next_state <= SCAN;
+
+                when SCAN => 
+                    if(Q = "01") then  -- somma + shift.
+                        cu_selAQ <= '1';
+                        cu_loadAQ <= '1'; 
+                        next_state <= RSHIFT;
+                    elsif(Q = "10") then -- sottrazione + shift.
+                        cu_sub <= '1';  
+                        cu_selAQ <= '1';
+                        cu_loadAQ <= '1'; 
+                        next_state <= RSHIFT;
+                    elsif (Q = "00" OR Q = "11") then -- shift.
+                        next_state <= RSHIFT;
+                    end if;
+
+                when RSHIFT =>
+                    cu_shift <= '1';
+
+                    if cu_count = "111" then
+                        next_state <= STOP;
+                    else
+                        next_state <= INCREMENT;
+                    end if;
+
+                when INCREMENT =>
+                    cu_count_in <= '1';
+                    next_state <= SCAN;
+
+                when STOP => 
                         cu_stop <= '1'; 
                         next_state <= IDLE;
-                end case;
+            end case;
         end process;                          
 end behavioral;
