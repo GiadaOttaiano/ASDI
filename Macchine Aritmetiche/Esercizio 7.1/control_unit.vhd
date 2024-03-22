@@ -5,9 +5,9 @@ use IEEE.numeric_std.all;
 entity CU is
     port(
         Q : IN std_logic_vector(1 downto 0);
-        cu_clock, cu_start, cu_reset : IN std_logic;
+        cu_start, cu_clock, cu_reset : IN std_logic;
         cu_count : IN std_logic_vector(2 downto 0);
-        cu_loadAQ, cu_count_in, cu_shift, cu_loadM, cu_selAQ, cu_sub, cu_stop: OUT std_logic
+        cu_loadAQ, cu_count_in, cu_shift, cu_loadM, cu_sub, cu_selAQ, cu_stop: OUT std_logic
     );
 end CU;
 
@@ -83,8 +83,8 @@ architecture behavioral of CU is
                     next_state <= SCAN;
 
                 when STOP => 
-                        cu_stop <= '1'; 
-                        next_state <= IDLE;
+                    cu_stop <= '1'; 
+                    next_state <= IDLE;
             end case;
         end process;                          
 end behavioral;
