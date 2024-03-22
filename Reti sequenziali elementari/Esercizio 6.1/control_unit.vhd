@@ -33,14 +33,14 @@ architecture behavioral of control_unit is
 
                         if cu_start = '1' then
                             next_state <= READING;
-                            cu_read = '1';
+                            cu_read <= '1';
                         else
                             next_state <= IDLE;
                         end if; 
                         
                     when READING =>
                         next_state <= RUNNING;
-                        cu_read = '0';
+                        cu_read <= '0';
 
                     when RUNNING =>
                         next_state <= WRITING;
@@ -58,10 +58,9 @@ architecture behavioral of control_unit is
                             next_state <= IDLE;
                             cu_reset <= '1';
                         else
-                            next_state <= READ;
+                            next_state <= READING;
                             cu_read <= '1';
                         end if;
                 end case;
-            end if;
         end process;
 end behavioral;
