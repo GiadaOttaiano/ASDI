@@ -47,9 +47,9 @@ BEGIN
         res <= '0';
 
         -- -------------------------------------   operazione numero 1:
-        -- 15*3=45 (002D)
-        inputx <= "00001111";
-        inputy <= "00000011";
+        -- 13*4=52 (0034)
+        inputx <= "00001101";
+        inputy <= "00000100";
 
         -- start deve essere visto da clk_div: poich� sar� generato dal button debouncer si aggiunger� anche il clk_div
         -- al button debouncer e il segnale di start deve durare quanto il periodo del clk rallentato
