@@ -54,9 +54,12 @@ architecture behavioral of control_unit is
                     when STOPPED =>
                         cu_enable <= '0';
 
-                        if cu_stop = '1' OR cu_control = '1' then
+                        if cu_stop = '1' then
                             next_state <= IDLE;
                             cu_reset <= '1';
+                        elsif cu_control = '1' then
+                            next_state <= IDLE;
+                            cu_reset <= '1'; 
                         else
                             next_state <= READING;
                             cu_read <= '1';
