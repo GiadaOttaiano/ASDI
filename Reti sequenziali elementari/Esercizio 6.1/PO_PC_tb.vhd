@@ -17,6 +17,7 @@ ARCHITECTURE behavioral OF PO_PC_tb IS
 
     SIGNAL pp_clock_tb, pp_start_tb, pp_stop_tb : STD_LOGIC := '0';
     SIGNAL pp_out_tb : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    CONSTANT PERIOD : time := 5 ns;
     
     SIGNAL cu_enable_tb, cu_write_tb, cu_read_tb : STD_LOGIC;
 
@@ -35,18 +36,15 @@ BEGIN
 
     clock : PROCESS
     BEGIN
-        WAIT FOR 5 ns;
+        WAIT FOR PERIOD/2;
         pp_clock_tb <= NOT pp_clock_tb;
     END PROCESS;
 
     stim_proc : PROCESS
     BEGIN
-
-        WAIT FOR 100 ns;
-
         pp_start_tb <= '1';
 
-        WAIT FOR 200 ns;
+        WAIT FOR 320 ns;
 
         pp_start_tb <= '0';
         pp_stop_tb <= '1';
