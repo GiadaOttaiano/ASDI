@@ -80,7 +80,7 @@ BEGIN
 
     ADD_SUB : adder_subtractor PORT MAP(AQ_out(16 DOWNTO 9), m_reg, ou_sub, partial, carry);
 
-    COUNTER : counter_mod_8 PORT MAP(ou_clock, ou_reset, ou_count_in, ou_count);
+    COUNTER : counter_mod_8 PORT MAP(ou_count_in, ou_clock, ou_reset, ou_count);
 
     ou_result <= AQ_out;
 
