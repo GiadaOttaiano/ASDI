@@ -7,7 +7,7 @@ END PO_PC_tb;
 
 ARCHITECTURE behavioral OF PO_PC_tb IS
 
-    COMPONENT PO_PC
+    COMPONENT PO_PC is
         PORT (
             pp_clock, pp_start, pp_stop : IN STD_LOGIC;
             pp_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
