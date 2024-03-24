@@ -44,7 +44,7 @@ architecture structural of booth_on_board is
                 RST => '0'',
                 CLK => CLOCK,
                 BTN => READ,
-                CLEARED_TBN => cleared_read
+                CLEARED_BTN => cleared_read
             );
 
         debouncer_reset : ButtonDebouncer
@@ -53,7 +53,7 @@ architecture structural of booth_on_board is
                 RST => '0',
                 CLK => CLOCK,
                 BTN => RESET,
-                CLEARED_TBN => cleared_reset
+                CLEARED_BTN => cleared_reset
             );
 
         multiplier : booth_multiplier
