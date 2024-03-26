@@ -43,7 +43,7 @@ architecture structural of nodeA is
             ouA_output : OUT std_logic_vector(M-1 downto 0);
             ouA_count : OUT std_logic_vector(DEPTH-1 downto 0)
         );
-    end OU_A;
+    end component;
 
     signal temp_count : std_logic_vector(3 downto 0);
     signal temp_enable : std_logic;

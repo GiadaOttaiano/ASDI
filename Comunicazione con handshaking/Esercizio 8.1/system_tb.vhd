@@ -13,7 +13,7 @@ architecture behavioral of system_tb is
         );
     end component;
 
-    signal start_tb, clock_tb, reset_tb := '0';
+    signal start_tb, clock_tb, reset_tb : std_logic := '0';
     signal period : time := 10 ns;
 
     begin
@@ -47,4 +47,4 @@ architecture behavioral of system_tb is
                 wait;
             end process;
 
-end structural;
+end behavioral;

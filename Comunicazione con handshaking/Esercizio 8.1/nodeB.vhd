@@ -7,7 +7,7 @@ entity nodeB is
         start_B, clock_B, reset_B : IN std_logic;
         data : IN std_logic_vector(7 downto 0);
         DATA_READY_B : IN std_logic;
-        ACK_B : OUT std_logic;
+        ACK_B : OUT std_logic
     );
 end nodeB;
 

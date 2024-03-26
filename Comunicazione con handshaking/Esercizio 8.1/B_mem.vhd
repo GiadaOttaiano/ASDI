@@ -14,7 +14,7 @@ entity B_mem is
         B_read : IN std_logic;
         B_output : OUT std_logic_vector(M-1 downto 0)
     );
-end A_mem;
+end B_mem;
 
 architecture rtl of B_mem is
     type MEM_N_M is array(0 to N-1) of std_logic_vector(M-1 downto 0);
