@@ -53,6 +53,18 @@ architecture structural of omega_network is
                 sel_source => temp_source
             );
 
-        with 
+        with temp_source select
+            temp_destination(0) <=  msg0(0) when "00",
+                                    msg1(0) when "01",
+                                    msg2(0) when "10",
+                                    msg3(0) when "11", 
+                                    '-' when others;
+                                    
+        with temp_source select
+            temp_destination(1) <=  msg0(1) when "00", 
+                                    msg1(1) when "01",
+                                    msg2(1) when "10",
+                                    msg3(1) when "11", 
+                                    '-' when others;
 
 end structural;
