@@ -74,13 +74,13 @@ architecture behavioral of cuB is
 
                         next_state <= WAIT_END;
                     when WAIT_END => 
-                        if DATA_READY = '1' then
+                        if DATA_READY = '0' then
                             ACK <= '0';
                             cuB_sum <= '0';
                             cuB_read_mem <= '0';
-                            next_state <= WAIT_END;
-                        else
                             next_state <= INCREMENT;
+                        else
+                            next_state <= WAIT_END;
                         end if;
                     when INCREMENT => 
                         cuB_count_enable <= '1';
