@@ -14,9 +14,9 @@ entity OU_B is
         ouB_read, ouB_write : IN std_logic;
         ouB_A_data : IN std_logic_vector(M-1 downto 0);
         ouB_sum : IN std_logic;     -- Segnale di abilitazione alla somma
-        oub_count : OUT std_logic_vector(DEPTH-1 downto 0)
+        ouB_count : OUT std_logic_vector(DEPTH-1 downto 0)
     );
-end OU_A;
+end OU_B;
 
 architecture structural of OU_B is
 
@@ -89,5 +89,5 @@ architecture structural of OU_B is
             );
 
         temp_sum <= std_logic_vector(unsigned(ouB_A_data) + unsigned(mem_output)) when ouB_sum = '1';
-        oub_count <= count_output;
+        ouB_count <= count_output;
 end structural;
