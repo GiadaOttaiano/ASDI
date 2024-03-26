@@ -28,7 +28,7 @@ architecture structural of switch is
         );
     end component;
 
-    signal temp : std_logic_vector(1 downto 0);
+    signal temp : std_logic;
 
     begin
         mux : mux21

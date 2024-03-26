@@ -36,19 +36,19 @@ begin
     stimulus: process
     begin
         -- Test 1
-        sel <= "0001";
-        msg0 <= "101";
-        msg1 <= "010";
-        msg2 <= "111";
-        msg3 <= "001";
+        sel_tb <= "0001";
+        msg0_tb <= "101";
+        msg1_tb <= "010";
+        msg2_tb <= "111";
+        msg3_tb <= "001";
         wait for 50 ns;
 
         -- Test 2
-        sel <= "1010";
-        msg0 <= "011";
-        msg1 <= "100";
-        msg2 <= "001";
-        msg3 <= "110";
+        sel_tb <= "1010";
+        msg0_tb <= "011";
+        msg1_tb <= "100";
+        msg2_tb <= "001";
+        msg3_tb <= "110";
         wait for 50 ns;
         wait;
     end process;
