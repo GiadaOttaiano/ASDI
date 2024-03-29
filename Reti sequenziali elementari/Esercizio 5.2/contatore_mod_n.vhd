@@ -8,12 +8,12 @@ ENTITY contatore_mod_n IS
         MAX : POSITIVE := 60 -- Conteggio massimo
     );
     PORT (
-        init : IN STD_LOGIC_VECTOR(N - 1 downto 0); -- Valore iniziale
-        clock : IN STD_LOGIC; -- Clock di sistema
+        init : IN STD_LOGIC_VECTOR(N - 1 downto 0);
+        clock : IN STD_LOGIC; 
         set : IN STD_LOGIC; -- Set per inizializzare il contatore
-        reset : IN STD_LOGIC; -- Reset del contatore
+        reset : IN STD_LOGIC;
         enable : IN STD_LOGIC; -- Abilitazione del contatore
-        carry_out : OUT STD_LOGIC; -- Riporto uscente
+        carry_out : OUT STD_LOGIC; 
         count : OUT INTEGER RANGE 0 TO MAX -- Conteggio del contatore
     );
 END contatore_mod_n;
@@ -28,17 +28,17 @@ BEGIN
             counter <= init;
         end if;
         IF reset = '1' THEN
-            counter <= (OTHERS => '0'); -- Reset del contatore
+            counter <= (OTHERS => '0');
         ELSIF rising_edge(clock) AND enable = '1' THEN
-            IF unsigned(counter) = MAX THEN      -- Counter raggiunge il suo massimo valore
-                counter <= (OTHERS => '0'); -- Ritorna a zero quando raggiunge il massimo
+            IF unsigned(counter) = MAX THEN      
+                counter <= (OTHERS => '0'); 
             ELSE
-                counter <= STD_LOGIC_VECTOR(unsigned(counter) + 1); -- Incrementa il contatore
+                counter <= STD_LOGIC_VECTOR(unsigned(counter) + 1); 
             END IF;
         END IF;
     END PROCESS;
 
-    count <= to_integer(unsigned(counter)); -- Output del valore del contatore
+    count <= to_integer(unsigned(counter)); 
     carry_out <= '1' WHEN unsigned(counter) = MAX AND enable = '1' ELSE '0';
 
 END behavioral;

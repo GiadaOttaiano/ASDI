@@ -4,15 +4,15 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity cronometro_on_board is
     port (
-        rst, clk : in STD_LOGIC;
+        reset, clock : in STD_LOGIC;
         anodes_out : out STD_LOGIC_VECTOR (7 downto 0);
         cathodes_out : out STD_LOGIC_VECTOR (7 downto 0);
-        bottone_secondi : in STD_LOGIC;
-        bottone_minuti : in STD_LOGIC;
-        bottone_ore : in STD_LOGIC;
-        hours_in : IN STD_LOGIC_VECTOR(4 downto 0); 
-        minutes_in : IN STD_LOGIC_VECTOR(5 downto 0); 
-        seconds_in : IN STD_LOGIC_VECTOR(5 downto 0)
+        seconds_button : in STD_LOGIC;
+        minutes_button : in STD_LOGIC;
+        hours_button : in STD_LOGIC;
+        hours_in : in STD_LOGIC_VECTOR(4 downto 0); 
+        minutes_in : in STD_LOGIC_VECTOR(5 downto 0); 
+        seconds_in : in STD_LOGIC_VECTOR(5 downto 0)
     );
 end cronometro_on_board;
 
@@ -20,32 +20,32 @@ architecture structural of cronometro_on_board is
 
     component contatore_mod_n is
         GENERIC (
-            N : POSITIVE := 6; 
+            N : POSITIVE := 2; 
             MAX : POSITIVE := 60
         );
 
         PORT (
-            bottone_load: in std_logic;
+            load_button: IN std_logic;
             init : IN STD_LOGIC_VECTOR(N - 1 downto 0); 
             clock : IN STD_LOGIC; 
             set : IN STD_LOGIC; 
             reset : IN STD_LOGIC; 
             enable : IN STD_LOGIC;
             carry_out : OUT STD_LOGIC; 
-            count : OUT INTEGER RANGE 0 TO MAX
+            count : OUT STD_LOGIC_VECTOR(N-1 downto 0)
         );
     end component;
 
-    component button_debouncer
+    component ButtonDebouncer
         generic (
-            CLK_period: integer := 10; -- Period of the board’s clock in nanoseconds
-            btn_noise_time: integer := 10000000 -- Estimated button bounce duration in nanoseconds
+            CLK_period: integer := 10; 
+            btn_noise_time: integer := 10000000 
         );
         port (
-            RST : in STD_LOGIC;
-            CLK : in STD_LOGIC;
-            BTN : in STD_LOGIC;
-            CLEARED_BTN : out STD_LOGIC
+            RST : IN STD_LOGIC;
+            CLK : IN STD_LOGIC;
+            BTN : IN STD_LOGIC;
+            CLEARED_BTN : OUT STD_LOGIC
         );
     end component;
 
@@ -94,7 +94,7 @@ architecture structural of cronometro_on_board is
 
     signal temp_s : std_logic_vector(5 downto 0) := (others => '0');
     signal temp_m : std_logic_vector(5 downto 0) := (others => '0');
-    signal temp_h : std_logic_vector(4 downto 0) := (others => '0');
+    signal temp_h : std_logic_vector(3 downto 0) := (others => '0');
 
     signal filtered_clock : std_logic;
 
@@ -106,7 +106,7 @@ architecture structural of cronometro_on_board is
                 CLKOUT_freq => 1
             )
             port map(
-                clock_in => clk_tot,
+                clock_in => clock,
                 reset => cleared_reset_b,
                 clock_out => filtered_clock
             );
@@ -117,13 +117,13 @@ architecture structural of cronometro_on_board is
                 max => 60
             )
             port map (
-                bottone_load => cleared_seconds_b,
-                init => set_s,
-                clock => clk_tot,
+                load_button => cleared_seconds_b,
+                init => seconds_in,
+                clock => clock,
                 reset => cleared_reset_b,
-                count_in => filtered_clock,
-                count => temp_s,
-                y => enable_m
+                enable => filtered_clock,
+                carry_out => enable_m,
+                count => temp_s
             );
 
         cont_minuti: cont_mod_n
@@ -132,13 +132,13 @@ architecture structural of cronometro_on_board is
                 max => 60
             )
             port map (
-                bottone_load => cleared_minutes_b,
-                init => set_m,
-                clock => clk_tot,
+                load_button => cleared_minutes_b,
+                init => minutes_in,
+                clock => clock,
                 reset => cleared_reset_b,
-                count_in => enable_m,
-                count => temp_m,
-                y => enable_h
+                enable => enable_m,
+                carry_out => enable_h,
+                count => temp_m                
             );
 
         cont_ore: cont_mod_n
@@ -147,82 +147,82 @@ architecture structural of cronometro_on_board is
                 max => 12
             )
             port map (
-                bottone_load => cleared_hours_b,
-                init => set_o,
-                clock => clk_tot,
+                load_button => cleared_hours_b,
+                init => hours_in,
+                clock => clock,
                 reset => cleared_reset_b,
-                count_in => enable_h,
-                count => temp_o,
-                y => temp
+                enable => enable_h,
+                carry_out => temp,
+                count => temp_h
             );
 
         de_B_sec: button_debouncer
             Generic map (
-                CLK_period => 10, -- Period of the board’s clock in 10ns
-                btn_noise_time => 10000000 -- Estimated button bounce duration of 10ms
+                CLK_period => 10, 
+                btn_noise_time => 10000000 
             )
             Port map (
                 RST => '0','
-                CLK => clk_tot,
-                BTN => bottone_secondi,
+                CLK => clock,
+                BTN => seconds_button,
                 CLEARED_BTN => cleared_seconds_b
             );
 
         de_B_min: button_debouncer
             Generic map (
-                CLK_period => 10, -- Period of the board’s clock in 10ns
-                btn_noise_time => 10000000 -- Estimated button bounce duration of 10ms
+                CLK_period => 10, 
+                btn_noise_time => 10000000 
             )
             Port map (
                 RST => '0'',
-                CLK => clk_tot,
-                BTN => bottone_minuti,
+                CLK => clock,
+                BTN => minutes_button,
                 CLEARED_BTN => cleared_minutes_b
             );
 
         de_B_ore: button_debouncer
             Generic map (
-                CLK_period => 10, -- Period of the board’s clock in 10ns
-                btn_noise_time => 10000000 -- Estimated button bounce duration of 10ms
+                CLK_period => 10, 
+                btn_noise_time => 10000000 
             )
             Port map (
                 RST => '0',
-                CLK => clk_tot,
-                BTN => bottone_ore,
+                CLK => clock,
+                BTN => hours_button,
                 CLEARED_BTN => cleared_hours_b
             );
 
         de_B_rst: button_debouncer
             Generic map (
-                CLK_period => 10, -- Period of the board’s clock in 10ns
-                btn_noise_time => 10000000 -- Estimated button bounce duration of 10ms
+                CLK_period => 10, 
+                btn_noise_time => 10000000
             )
             Port map (
                 RST => '0',
-                CLK => clk_tot,
-                BTN => rst_tot,
+                CLK => clock,
+                BTN => reset,
                 CLEARED_BTN => cleared_reset_b
             );
 
         input_display : convertitore
             Port map(
-                secondi => temp_s,
-                minuti => temp_m,
-                ore => temp_o,
-                uscita => val_32bit
+                seconds => temp_s,
+                minutes => temp_m,
+                hours => temp_h,
+                output => val_32bit
             );
 
         seven_segment_array: display_seven_segments
             Generic map(
-                CLKIN_freq => 100000000, --qui inserisco i parametri effettivi (clock della board e clock in uscita desiderato)
-                CLKOUT_freq => 500 --inserendo un valore inferiore si vedranno le cifre illuminarsi in sequenza
+                CLKIN_freq => 100000000, 
+                CLKOUT_freq => 500 
             )
             Port map(
-                CLK => clk_tot,
+                CLK => clock,
                 RST => '0',
                 value => val_32bit,
-                enable => "11111111", --stabilisco che tutti i display siano accesi
-                dots => "00000000", --stabilisco che tutti i punti siano spenti
+                enable => "11111111", -- Tutti i display accesi
+                dots => "00000000", -- Tutti i punti spenti
                 anodes => anodes_out,
                 cathodes => cathodes_out
             );
