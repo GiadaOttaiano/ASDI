@@ -111,7 +111,7 @@ architecture structural of cronometro_on_board is
                 clock_out => filtered_clock
             );
 
-        cont_secondi: cont_mod_n
+        seconds_count: cont_mod_n
             generic map (
                 N => 6,
                 max => 60
@@ -126,7 +126,7 @@ architecture structural of cronometro_on_board is
                 count => temp_s
             );
 
-        cont_minuti: cont_mod_n
+        minutes_count: cont_mod_n
             generic map (
                 N => 6,
                 max => 60
@@ -141,7 +141,7 @@ architecture structural of cronometro_on_board is
                 count => temp_m                
             );
 
-        cont_ore: cont_mod_n
+        hours_count: cont_mod_n
             generic map (
                 N => 4,
                 max => 12
@@ -156,7 +156,7 @@ architecture structural of cronometro_on_board is
                 count => temp_h
             );
 
-        de_B_sec: button_debouncer
+        Debouncer_seconds: button_debouncer
             Generic map (
                 CLK_period => 10, 
                 btn_noise_time => 10000000 
@@ -168,7 +168,7 @@ architecture structural of cronometro_on_board is
                 CLEARED_BTN => cleared_seconds_b
             );
 
-        de_B_min: button_debouncer
+        Debouncer_minutes: button_debouncer
             Generic map (
                 CLK_period => 10, 
                 btn_noise_time => 10000000 
@@ -180,7 +180,7 @@ architecture structural of cronometro_on_board is
                 CLEARED_BTN => cleared_minutes_b
             );
 
-        de_B_ore: button_debouncer
+        Debouncer_hours: button_debouncer
             Generic map (
                 CLK_period => 10, 
                 btn_noise_time => 10000000 
@@ -192,7 +192,7 @@ architecture structural of cronometro_on_board is
                 CLEARED_BTN => cleared_hours_b
             );
 
-        de_B_rst: button_debouncer
+        Debouncer_reset: button_debouncer
             Generic map (
                 CLK_period => 10, 
                 btn_noise_time => 10000000
