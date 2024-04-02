@@ -28,7 +28,6 @@ architecture structural of cronometro_on_board is
             load_button: IN std_logic;
             init : IN STD_LOGIC_VECTOR(N - 1 downto 0); 
             clock : IN STD_LOGIC; 
-            set : IN STD_LOGIC; 
             reset : IN STD_LOGIC; 
             enable : IN STD_LOGIC;
             carry_out : OUT STD_LOGIC; 
