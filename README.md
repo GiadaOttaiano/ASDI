@@ -2,4 +2,4 @@
 
 Esercizi Board mancanti:
 
-Esercizi non-Board mancanti: 10
+Esercizi non-Board mancanti: 
